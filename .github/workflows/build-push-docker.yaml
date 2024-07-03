@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build_publish_docker:
     runs-on: ubuntu-latest
 
     steps:
