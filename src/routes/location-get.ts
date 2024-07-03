@@ -6,7 +6,7 @@ ip3country.init();
 export const LOCATION_GET: RouteOptions = {
   handler: async (request, reply) => {
     const ipAddress: string | null =
-      (request.headers['x-client-ip'] as string | null) || null;
+      (request.headers['x-real-ip'] as string | null) || null;
 
     const country: string | null = ipAddress
       ? ip3country.lookupStr(ipAddress)
