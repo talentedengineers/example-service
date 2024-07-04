@@ -8,7 +8,7 @@
     "start": "node dist/main.js",
     "dev": "npm run build && node dist/main.js"
   },
-  "author": "Link Bird",
+  "author": "Barend Erasmus",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.14.9",
