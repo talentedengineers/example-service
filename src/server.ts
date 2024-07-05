@@ -2,7 +2,7 @@ import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
-import { HEADERS_GET, LOCATION_GET } from './routes';
+import { HEADERS_GET } from './routes';
 
 export async function startServer() {
   const server = fastify({
@@ -42,8 +42,6 @@ export async function startServer() {
   });
 
   server.route(HEADERS_GET);
-
-  server.route(LOCATION_GET);
 
   server.route({
     handler: async (request, reply) => {
