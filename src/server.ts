@@ -61,7 +61,7 @@ export async function startServer() {
 
   server.route({
     handler: async (request, reply) => {
-      reply.status(200).send();
+      reply.status(200).send({ message: 'PONG' });
     },
     method: 'GET',
     url: '/api/v1/ping',
