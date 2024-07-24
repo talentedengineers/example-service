@@ -1,3 +1,4 @@
+import axios from 'axios';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
@@ -45,15 +46,28 @@ export async function startServer() {
 
   server.route({
     handler: async (request, reply) => {
-      let healthy: boolean = true;
+      try {
+        const response = await axios.get(`${process.env.HEALTH_CHECK_URL}`, {
+          validateStatus: () => true,
+        });
 
-      if (!healthy) {
+        console.log(`[response.data]: ${response.data}`);
+        console.log(`[response.status]: ${response.status}`);
+
+        let healthy: boolean = response.status === 200;
+
+        if (!healthy) {
+          reply.status(503).send();
+
+          return;
+        }
+
+        reply.status(200).send();
+      } catch (error: any) {
+        console.log(`[error.message]: ${error.message}`);
+
         reply.status(503).send();
-
-        return;
       }
-
-      reply.status(200).send();
     },
     method: 'GET',
     url: '/api/v1/health',
@@ -61,7 +75,7 @@ export async function startServer() {
 
   server.route({
     handler: async (request, reply) => {
-      reply.status(200).send({ message: 'PONG' });
+      reply.status(200).send();
     },
     method: 'GET',
     url: '/api/v1/ping',
