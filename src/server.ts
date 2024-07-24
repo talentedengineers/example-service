@@ -47,6 +47,12 @@ export async function startServer() {
   server.route({
     handler: async (request, reply) => {
       try {
+        if (!process.env.HEALTH_CHECK_URL) {
+          reply.status(200).send();
+
+          return;
+        }
+
         const response = await axios.get(`${process.env.HEALTH_CHECK_URL}`, {
           validateStatus: () => true,
         });
