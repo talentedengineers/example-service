@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: my-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: my-app
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-pod
-        image: hirebarend/nodejs-service:latest
+        image: ghcr.io/talentedengineers/example-service:latest
         ports:
         - containerPort: 8080
         livenessProbe:
@@ -29,3 +29,9 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
+        # envFrom:
+        #     - configMapRef:
+        #         name: my-secret
+        env:
+          - name: 'NAME'
+            value: 'TEST 101'

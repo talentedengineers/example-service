@@ -1,13 +1,15 @@
-import axios from 'axios';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
-import { HEADERS_GET } from './routes';
+import { GENERATE_GET } from './routes';
 
 export async function startServer() {
   const server = fastify({
-    logger: true,
+    caseSensitive: false,
+    ignoreDuplicateSlashes: true,
+    ignoreTrailingSlash: true,
+    logger: process.env.DEBUG ? true : false,
   });
 
   await server.register(fastifyCors, {
@@ -42,38 +44,19 @@ export async function startServer() {
     routePrefix: '/docs',
   });
 
-  server.route(HEADERS_GET);
+  server.route(GENERATE_GET);
 
   server.route({
     handler: async (request, reply) => {
-      try {
-        if (!process.env.HEALTH_CHECK_URL) {
-          reply.status(200).send();
+      let healthy: boolean = true;
 
-          return;
-        }
-
-        const response = await axios.get(`${process.env.HEALTH_CHECK_URL}`, {
-          validateStatus: () => true,
-        });
-
-        console.log(`[response.data]: ${response.data}`);
-        console.log(`[response.status]: ${response.status}`);
-
-        let healthy: boolean = response.status === 200;
-
-        if (!healthy) {
-          reply.status(503).send();
-
-          return;
-        }
-
-        reply.status(200).send();
-      } catch (error: any) {
-        console.log(`[error.message]: ${error.message}`);
-
+      if (!healthy) {
         reply.status(503).send();
+
+        return;
       }
+
+      reply.status(200).send();
     },
     method: 'GET',
     url: '/api/v1/health',

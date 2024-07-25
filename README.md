@@ -1,5 +1,9 @@
-# Node.js Service
+# Example Service
 
 ```bash
-docker run --name nodejs-service -p 80:8080 -d hirebarend/nodejs-service:latest
+kubectl create namespace my-namespace-001
+
+kubectl apply -f example-service.yaml -n my-namespace-001
+
+kubectl apply -f example-service-ingress.yaml -n my-namespace-001
 ```

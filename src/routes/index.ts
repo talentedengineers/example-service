@@ -1,2 +1,1 @@
-export * from './axios-post';
-export * from './headers-get';
+export * from './generate-get';
